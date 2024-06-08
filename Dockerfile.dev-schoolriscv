@@ -1,0 +1,12 @@
+FROM ubuntu:latest
+
+RUN apt-get update
+# Required dependencies for convenience:
+RUN apt-get install -y \
+    sudo \
+    git \
+    make\
+    iverilog \
+    default-jre \
+    gcc-riscv64-unknown-elf \
+    gcc-riscv64-linux-gnu
