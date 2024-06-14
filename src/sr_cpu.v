@@ -17,7 +17,7 @@ module sr_cpu
     input   [ 4:0]  regAddr,    // debug access reg address
     output  [31:0]  regData,    // debug access reg data
     output  [31:0]  imAddr,     // instruction memory address
-    input   [31:0]  imData      // instruction memory data
+    input   [31:0]  imData [1:0]     // instruction memory data
 );
     //control wires
     wire        aluZero;
@@ -43,11 +43,24 @@ module sr_cpu
     wire [31:0] pcBranch = pc + immB;
     wire [31:0] pcPlus4  = pc + 4;
     wire [31:0] pcNext   = pcSrc ? pcBranch : pcPlus4;
-    sm_register r_pc(clk ,rst_n, pcNext, pc);
+    sm_register r_pc(clk, rst_n, pcNext, pc);
 
     //program memory access
     assign imAddr = pc >> 2;
-    wire [31:0] instr = imData;
+    // wire [31:0] instr = imData[order];
+    wire [31:0] instr;
+
+    arbiter #(
+        .BIT_DEPTH  ( 32            )
+    ) arb (
+        .clk        ( clk           ),
+        .arstn      ( rst_n         ),
+        .t_data_i   ( imData        ),
+        .t_valid_i  ( 2'b11         ), // TODO: plugin conflict detector
+        .t_data_o   ( instr         ),
+        .t_valid_o  (),
+        .t_number_o ()
+    );
 
     //instruction decode
     sr_decode id (
