@@ -14,11 +14,12 @@ module sm_rom
 )
 (
     input  [31:0] a,
-    output [31:0] rd [1:0]
+    output [31:0] rd //[1:0]
 );
     reg [31:0] rom [SIZE - 1:0];
-    assign rd[0] = rom [a];
-    assign rd[1] = rom [a + 1];
+    assign rd = rom [a];
+    // assign rd[0] = rom [a];
+    // assign rd[1] = rom [a + 1];
 
     initial begin
         $readmemh ("program.hex", rom);

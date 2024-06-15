@@ -41,7 +41,7 @@ module sm_top
 
     //instruction memory
     wire    [31:0]  imAddr;
-    wire    [31:0]  imData [1:0];
+    wire    [31:0]  imData;// [1:0];
     sm_rom reset_rom(imAddr, imData);
 
     sr_cpu sm_cpu
